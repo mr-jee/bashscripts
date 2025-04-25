@@ -1,0 +1,24 @@
+#!/bin/bash
+log_src="/var/log/myapp"
+backup_dst="/root/logarchivelab"
+today=$(date +%F)
+archive_name="myapp_log_${today}.tar.gz"
+logfile="/root/logarchivelab/myapp_backup.log"
+
+
+#check log files size and log them into file
+echo "===========$(date)===========" >> "$logfile"
+echo "File size before backup: " >> "$logfile"
+du -sh "$log_src"/* >> "$logfile"
+
+#Archive and log
+tar -cvzf "${backup_dst}/${archive_name}" -C /var/log myapp
+if [ $? -eq 0 ]; then
+        echo "Backup succeccful: ${archive_name}" >> "$logfile"
+else
+        echo "Backup failed" >> "$logfile"
+fi
+
+echo -e "\n\n" >> "$logfile"
+
+~
